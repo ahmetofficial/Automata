@@ -1,16 +1,17 @@
 package animate;
 
+import java.awt.*;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Font;
+
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Container;
+import java.awt.Rectangle;
+import java.util.Random;
+import javafx.scene.layout.Background;
 import java.awt.Color;
-import java.awt.Image;
-import java.awt.Insets;
-import java.awt.image.BufferedImage;
-import java.util.Timer;
-import java.util.TimerTask;
-
-
 
 public class Motion_EA implements Animator {
     final static double DELTA = Math.PI/50; //one turn = 100 ticks 
@@ -18,26 +19,19 @@ public class Motion_EA implements Animator {
     final Container pan = new Panel();
     double angle = 0; //in radians
 
-  Image buffer;
+    int x=0,y=250;
 
-  Dimension oldSize;
-
-  Insets insets;
-
-  Color colors[] = { Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN,
-      Color.BLUE, Color.MAGENTA };
-   
     public int doTick() {
-        angle += DELTA; pan.repaint(); 
+        pan.repaint(); 
          
-        return 500;
+        return 80;
        
     }
     public Container container() {
         return pan;
     }
     public String description() {
-        return "wheel of fortune - 180 degree";
+        return " Renkli Kayan Yazý";
     }
     public String author() {
         return "Emre Aydin";
@@ -45,42 +39,49 @@ public class Motion_EA implements Animator {
    
    class Panel extends javax.swing.JPanel { //drawing
       public void paint(Graphics g) {
- if ((oldSize == null) || (oldSize != getSize())) {
-      oldSize = getSize();
-      buffer = new BufferedImage(getWidth(), getHeight(),
-          BufferedImage.TYPE_INT_RGB);
-    }
-    if (insets == null) {
-      insets = getInsets();
-    }
-    // Calculate each time in case of resize
-    int x = insets.left;
-    int y = insets.top;
-    int width = getWidth()- insets.left - insets.right ;
-    int height = getHeight() - insets.top - insets.bottom;
-    int start = 0;
-    int steps = colors.length;
-    int stepSize = 180 / steps;
-    synchronized (colors) {
-      Graphics bufferG = buffer.getGraphics();
-      bufferG.setColor(Color.WHITE);
-      bufferG.fillRect(x, y, width, height);
-      for (int i = 0; i < steps; i++) {
-        bufferG.setColor(colors[i]);
-        bufferG.fillArc(x, y, width, height, start, stepSize);
-        start += stepSize;
-      }
-    }
-   
-   
-    g.drawImage(buffer, 0, 0, this);
-    
-    Color c = colors[0];
-        synchronized (colors) {
-          System.arraycopy(colors, 1, colors, 0, colors.length - 1);
-          colors[colors.length - 1] = c;
+        super.paint(g);
+        Graphics2D g2=(Graphics2D)g;
+        Font font = new Font("Tahoma",Font.BOLD+Font.PLAIN,27);
+          g2.setFont(font);
+          g.clearRect(0, 0, 2*MX, 2*MY);
+        if(x<100){  
+        g2.setColor(Color.red);
+        
         }
-      }   
+        else if(x<200){
+        g2.setColor(Color.orange);
+        
+        }
+        else if(x<300){
+        g2.setColor(Color.blue);
+        
+         
+        
+        }
+        else if(x<400){
+        g2.setColor(Color.black);
+        }
+        else{
+        g2.setColor(Color.yellow);
+        }
+        
+        g2.drawString("Fatih Sultan Mehmet Vakýf Universitesi",x,y);
+        
+      
+        
+        x+=10;
+        if(x>this.getWidth()-200)
+        {
+        x=0;
+        }
+         
+        
+        
+       
+        
+        
+        
+      }
       
    } 
 }
